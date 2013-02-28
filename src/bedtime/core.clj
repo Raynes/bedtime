@@ -3,11 +3,16 @@
             [seesaw.mig :as sm]
             [seesaw.behave :refer [when-focused-select-all]]
             [clj-time.core :as t] 
-            [me.raynes.conch :refer [programs]]))
+            [me.raynes.conch :refer [programs]]
+            [overtone.at-at :refer [mk-pool after]]))
 
 (s/native!)
 
 (programs osascript)
+
+(def pool (mk-pool))
+
+(def timer (atom {:job nil}))
 
 (defn calculate-time [time]
   (let [[hours minute seconds] (map #(Long. %) (.split time ":"))
@@ -22,9 +27,10 @@
 (defn sleep-event [t]
   (fn [e]
     (let [time (s/text t)]
-      (future
-        (Thread/sleep (calculate-time time))
-        (osascript "-e" "tell application \"System Events\" to sleep")))))
+      (swap! timer assoc
+             :job (after (calculate-time time)
+                         #(osascript "-e" "tell application \"System Events\" to sleep")
+                         pool)))))
 
 (defn time-field []
   (let [t (s/text :text "h:m:s"

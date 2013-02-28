@@ -7,5 +7,6 @@
                  [seesaw "1.4.2"]
                  [com.miglayout/miglayout "3.7.4"]
                  [clj-time "0.4.4"]
-                 [me.raynes/conch "0.5.1"]]
+                 [me.raynes/conch "0.5.1"]
+                 [overtone/at-at "1.1.1"]]
   :main bedtime.main/-main)
