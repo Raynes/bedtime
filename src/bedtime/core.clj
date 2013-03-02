@@ -16,9 +16,9 @@
 (def timer (atom {:job nil}))
 
 (defn validate-input [t]
-  (or (try (f/parse (f/formatters :hour-minute-second) t)
-           (catch IllegalArgumentException _))
-      (s/alert "Time must be of hour:minute:second format!")))
+  (try (f/parse (f/formatters :hour-minute-second) t)
+       (catch IllegalArgumentException _
+         (s/alert "Time must be of hour:minute:second format!"))))
 
 (defn calculate-time [time]
   (when-let [[hour minute second] ((juxt t/hour t/minute t/secs)
