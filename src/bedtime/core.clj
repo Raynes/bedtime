@@ -56,7 +56,6 @@
         (.setContentPane (countdown frame timer-map))
         (s/pack!)))))
 
-(frame)
 (defn time-field []
   (let [t (s/text :text "1:0:0"
                   :editable? true)]
